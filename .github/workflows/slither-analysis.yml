@@ -15,18 +15,5 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
-
-      - name: Install dependencies
-        run: forge install
-
-      - name: Build project
-        run: forge build --extra-output abi --extra-output userdoc --extra-output devdoc --extra-output evm.methodIdentifiers --force
-
       - name: Run Slither
-        run: |
-          pip install slither-analyzer
-          slither . --solc-args="--allow-paths ., /usr/share/solc"
+        uses: crytic/slither-action@dev-install-foundry
