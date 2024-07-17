@@ -15,5 +15,28 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install dependencies
+        run: forge install
+
+      - name: Build project
+        run: forge build --extra-output abi --extra-output userdoc --extra-output devdoc --extra-output evm.methodIdentifiers --force
+
+      - name: Debug Foundry Output
+        run: |
+          cat path/to/foundry/output.json  # Adjust the path to where Foundry outputs its build artifacts
+
+      - name: List Files for Debugging
+        run: |
+          ls -l  # List files in the current directory for debugging purposes
+
+      - name: Install Slither
+        run: pip install slither-analyzer
+
       - name: Run Slither
-        uses: crytic/slither-action@dev-install-foundry
+        run: |
+          slither . --solc-args="--allow-paths ., /usr/share/solc"
