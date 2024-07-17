@@ -1,0 +1,34 @@
+name: Slither Analysis
+
+on:
+  push:
+    branches:
+      - main # Adjust branch name as per your main branch
+  pull_request:
+    branches:
+      - main # Adjust branch name as per your main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x" # Ensure Python 3.x is installed
+
+      - name: Install Slither
+        run: pip install slither-analyzer
+
+      - name: Run Slither analysis
+        run: slither .
+
+      - name: Upload Slither report
+        uses: actions/upload-artifact@v2
+        with:
+          name: slither-report
+          path: slither-report.html
