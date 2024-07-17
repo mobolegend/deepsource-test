@@ -27,6 +27,6 @@ jobs:
         run: forge build --extra-output abi --extra-output userdoc --extra-output devdoc --extra-output evm.methodIdentifiers --force
 
       - name: Run Slither
-        uses: crytic/slither-action@v0.1.1
-        with:
-          ignore-compile: true
+        run: |
+          pip install slither-analyzer
+          slither . --solc-args="--allow-paths ., /usr/share/solc"
