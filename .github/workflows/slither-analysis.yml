@@ -35,4 +35,4 @@ jobs:
         run: pip install slither-analyzer
 
       - name: Run Slither with Config
-        run: slither . --solc-args="--allow-paths .,/usr/share/solc" --foundry-compile-all --slither-config=path/to/slither.config.json
+        run: slither . --solc-args="--allow-paths .,/usr/share/solc" --foundry-compile-all --json > slither-report.json && cat slither-report.json
