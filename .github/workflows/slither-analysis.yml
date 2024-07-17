@@ -27,16 +27,12 @@ jobs:
       - name: Install Foundry
         run: |
           curl -L https://foundry.paradigm.xyz | bash
-          echo "source ~/.bashrc" >> $GITHUB_ENV
-          echo "source ~/.zshrc" >> $GITHUB_ENV
-          ~/.foundry/bin/foundryup
+          /home/runner/.foundry/bin/foundryup
 
-      - name: Verify Foundry installation
-        run: ~/.foundry/bin/forge --version
+      - name: Add Foundry to PATH
+        run: echo "$HOME/.foundry/bin" >> $GITHUB_PATH
 
       - name: Run Slither analysis
-        env:
-          PATH: ~/.foundry/bin:${{ env.PATH }}
         run: slither .
 
       - name: Upload Slither report
