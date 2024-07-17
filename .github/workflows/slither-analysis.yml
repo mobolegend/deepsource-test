@@ -2,41 +2,31 @@ name: Slither Analysis
 
 on:
   push:
-    branches:
-      - main # Adjust branch name as per your main branch
+    branches: [main]
   pull_request:
-    branches:
-      - main # Adjust branch name as per your main branch
+    branches: [main]
 
 jobs:
-  build:
+  analyze:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Install Python
-        uses: actions/setup-python@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
         with:
-          python-version: "3.x"
-
-      - name: Install Slither
-        run: pip install slither-analyzer
+          submodules: recursive
 
       - name: Install Foundry
-        run: |
-          curl -L https://foundry.paradigm.xyz | bash
-          /home/runner/.foundry/bin/foundryup
-
-      - name: Add Foundry to PATH
-        run: echo "$HOME/.foundry/bin" >> $GITHUB_PATH
-
-      - name: Run Slither analysis
-        run: slither .
-
-      - name: Upload Slither report
-        uses: actions/upload-artifact@v2
+        uses: foundry-rs/foundry-toolchain@v1
         with:
-          name: slither-report
-          path: slither-report.html
+          version: nightly
+
+      - name: Install dependencies
+        run: forge install
+
+      - name: Build project
+        run: forge build --extra-output abi --extra-output userdoc --extra-output devdoc --extra-output evm.methodIdentifiers --force
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.1.1
+        with:
+          ignore-compile: true
