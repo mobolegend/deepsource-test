@@ -16,13 +16,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Python
+      - name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.x" # Ensure Python 3.x is installed
+          python-version: "3.x"
 
       - name: Install Slither
         run: pip install slither-analyzer
+
+      - name: Install Foundry
+        run: |
+          curl -L https://foundry.paradigm.xyz | bash
+          source ~/.bashrc
+          foundryup
 
       - name: Run Slither analysis
         run: slither .
